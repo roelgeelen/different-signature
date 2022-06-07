@@ -1,6 +1,0 @@
-{
-  "/api": {
-    "target": "https://api.hubapi.com/",
-    "secure": false
-  }
-}
