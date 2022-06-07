@@ -1,0 +1,14 @@
+
+<div class="signature-container" *ngIf="!signatureImg">
+  <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+</div>
+
+<div class="buttons" *ngIf="!signatureImg">
+  <button (click)="clearSignature()">Reset</button>
+  <button (click)="savePad()">Opslaan</button>
+</div>
+
+<div class="signature-image" *ngIf="signatureImg">
+  <img src='{{ signatureImg }}' />
+</div>
+<small>{{date | date: 'dd-MM-yyyy HH:mm'}}</small>
