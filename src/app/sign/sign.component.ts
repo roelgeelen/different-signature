@@ -25,8 +25,8 @@ export class SignComponent implements OnInit {
 
   signaturePadOptions: Object = {
     'minWidth': 2,
-    'canvasWidth': 280,
-    'canvasHeight': 185
+    'canvasWidth': 350,
+    'canvasHeight': 245
   };
 
   constructor(private route: ActivatedRoute, private hubspotService: HubspotService) {
