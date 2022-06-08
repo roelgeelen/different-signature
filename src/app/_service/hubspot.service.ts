@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +11,23 @@ export class HubspotService {
   constructor(private http: HttpClient) {
   }
 
+  getDealByID(dealID: string | null) {
+    return this.http.get<any>(`${environment.apiUrl}deal/${dealID}`)
+  }
+
   uploadSignature(dealID: string | null | undefined, file: string): Observable<HttpEvent<{}>> {
-    console.log('test');
     const formdata: FormData = new FormData();
     formdata.append('file', file);
-    formdata.append('folderPath', '/Signatures');
-    formdata.append('options', '{"access": "PUBLIC_INDEXABLE", "overwrite":false}');
-    const req = new HttpRequest('POST', `https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=eu1-a12a-c74a-45fa-809d-8ef902c25b96`, formdata, {
+    // @ts-ignore
+    formdata.append('dealid', dealID);
+    const req = new HttpRequest('POST', `${environment.apiUrl}upload/sign`, formdata, {
       reportProgress: true,
       responseType: 'text'
     });
     return this.http.request(req);
+  }
+
+  checkImage(url: string) {
+    return this.http.get<any>(url);
   }
 }

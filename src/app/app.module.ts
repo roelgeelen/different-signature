@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { SignComponent } from './sign/sign.component';
 import {HttpClientModule} from "@angular/common/http";
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SignComponent
+    SignComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ import {SignaturePad} from "angular2-signaturepad";
 import {ActivatedRoute, Routes} from "@angular/router";
 import {HubspotService} from "../_service/hubspot.service";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
+import {Deal} from "../models/Deal";
 
 @Component({
   selector: 'app-sign',
@@ -10,11 +11,14 @@ import {HttpEventType, HttpResponse} from "@angular/common/http";
   styleUrls: ['./sign.component.scss']
 })
 export class SignComponent implements OnInit {
+  deal: Deal | undefined;
   title = 'hubspot-signature';
   signatureImg: string | undefined;
+  progress: { percentage: number } = {percentage: 0};
   signed = false;
-  date: Date | undefined;
   dealID: string | null | undefined;
+  error: string = '';
+  loading = false;
   @ViewChild(SignaturePad) signaturePad: SignaturePad | undefined;
 
   signaturePadOptions: Object = {
@@ -26,12 +30,27 @@ export class SignComponent implements OnInit {
   constructor(private route: ActivatedRoute, private hubspotService: HubspotService) {
   }
 
-  ngAfterViewInit() {
-    // this.signaturePad is now available
+  ngOnInit(): void {
+    this.loading = true;
     // @ts-ignore
-    this.signaturePad.set('minWidth', 2);
-    // @ts-ignore
-    this.signaturePad.clear();
+    this.route.paramMap.subscribe(queryParams => {
+      if (queryParams.get('id') === null) {
+        this.error = 'Geen deal id aanwezig';
+        this.loading = false;
+      }
+      this.dealID = queryParams.get('id');
+      this.hubspotService.getDealByID(this.dealID).subscribe(r => {
+        this.deal = r;
+        this.error = '';
+        this.loading = false;
+        if (this.deal?.properties?.signature) {
+          this.signatureImg = 'https://25493451.fs1.hubspotusercontent-eu1.net/hubfs/25493451/Signatures/handtekening-' + this.dealID + '.png';
+        }
+      }, error => {
+        this.error = 'Deal ' + this.dealID + ' niet gevonden';
+        this.loading = false;
+      })
+    });
   }
 
   drawComplete() {
@@ -49,29 +68,19 @@ export class SignComponent implements OnInit {
   }
 
   savePad() {
+    this.loading = true;
     this.signed = true;
-    this.date = new Date();
     // @ts-ignore
     const base64Data = this.signaturePad.toDataURL();
-    this.signatureImg = base64Data;
     this.hubspotService.uploadSignature(this.dealID, base64Data).subscribe(r => {
       if (r.type === HttpEventType.UploadProgress) {
         // @ts-ignore
         this.progress.percentage = Math.round(100 * r.loaded / r.total);
       } else if (r instanceof HttpResponse) {
-        console.log('saved');
+        this.signatureImg = base64Data;
+        this.loading = false;
       }
     })
-  }
-
-  ngOnInit(): void {
-    // @ts-ignore
-    this.route.paramMap.subscribe(queryParams => {
-      if (queryParams.get('id') === null) {
-        return null;
-      }
-      this.dealID = queryParams.get('id');
-    });
   }
 
 }
