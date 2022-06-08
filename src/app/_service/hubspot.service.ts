@@ -27,8 +27,4 @@ export class HubspotService {
     });
     return this.http.request(req);
   }
-
-  checkImage(url: string) {
-    return this.http.get<any>(url);
-  }
 }
