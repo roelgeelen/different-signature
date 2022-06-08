@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {SignaturePad} from "angular2-signaturepad";
 import {ActivatedRoute, Routes} from "@angular/router";
 import {HubspotService} from "../_service/hubspot.service";
@@ -16,15 +16,17 @@ export class SignComponent implements OnInit {
   signatureImg: string | undefined;
   progress: { percentage: number } = {percentage: 0};
   signed = false;
-  dealID: string | null | undefined;
+  dealID: string | null = '';
+  name: string = '';
   error: string = '';
+  required: string = '';
   loading = false;
   @ViewChild(SignaturePad) signaturePad: SignaturePad | undefined;
 
   signaturePadOptions: Object = {
     'minWidth': 2,
     'canvasWidth': 280,
-    'canvasHeight': 150
+    'canvasHeight': 185
   };
 
   constructor(private route: ActivatedRoute, private hubspotService: HubspotService) {
@@ -53,31 +55,26 @@ export class SignComponent implements OnInit {
     });
   }
 
-  drawComplete() {
-    // @ts-ignore
-    console.log(this.signaturePad.toDataURL());
-  }
-
-  drawStart() {
-    console.log('begin drawing');
-  }
-
   clearSignature() {
     // @ts-ignore
     this.signaturePad.clear();
   }
 
   savePad() {
+    if (!this.name){
+      this.required = 'Vul eerst je naam in.';
+      return;
+    }
     this.loading = true;
     this.signed = true;
     // @ts-ignore
     const base64Data = this.signaturePad.toDataURL();
-    this.hubspotService.uploadSignature(this.dealID, base64Data).subscribe(r => {
+    this.hubspotService.uploadSignature(this.dealID, this.name, base64Data).subscribe(r => {
       if (r.type === HttpEventType.UploadProgress) {
         // @ts-ignore
         this.progress.percentage = Math.round(100 * r.loaded / r.total);
       } else if (r instanceof HttpResponse) {
-        this.signatureImg = base64Data;
+        this.signatureImg = 'https://25493451.fs1.hubspotusercontent-eu1.net/hubfs/25493451/Signatures/handtekening-' + this.dealID + '.png';
         this.loading = false;
       }
     })

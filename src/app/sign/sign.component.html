@@ -2,15 +2,24 @@
 <ng-container *ngIf="!loading">
   <div class="danger" *ngIf="error">{{error}}</div>
   <ng-container *ngIf="!error">
-    <div class="signature-container" *ngIf="!signatureImg">
-      <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()"
-                     (onEndEvent)="drawComplete()"></signature-pad>
+    <div class="form" *ngIf="!signatureImg">
+      <label>Volledige naam</label><br>
+      <input type="text" class="form-control" [(ngModel)]="name">
+      <br>
+      <small class="danger">{{required}}</small>
+      <br>
+      <br>
+      <label>Handtekening</label>
+      <div class="signature-container">
+        <signature-pad [options]="signaturePadOptions"></signature-pad>
+      </div>
+
+      <div class="buttons">
+        <button (click)="clearSignature()">Reset</button>
+        <button (click)="savePad()">Opslaan</button>
+      </div>
     </div>
 
-    <div class="buttons" *ngIf="!signatureImg">
-      <button (click)="clearSignature()">Reset</button>
-      <button (click)="savePad()">Opslaan</button>
-    </div>
 
     <div class="signature-image" *ngIf="signatureImg">
       <img src='{{ signatureImg }}'/>

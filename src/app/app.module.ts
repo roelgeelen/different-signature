@@ -7,6 +7,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { SignComponent } from './sign/sign.component';
 import {HttpClientModule} from "@angular/common/http";
 import { LoadingComponent } from './loading/loading.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -14,12 +15,13 @@ import { LoadingComponent } from './loading/loading.component';
     SignComponent,
     LoadingComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    SignaturePadModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        SignaturePadModule,
+        HttpClientModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

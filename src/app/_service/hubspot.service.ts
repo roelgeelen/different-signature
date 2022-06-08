@@ -15,11 +15,12 @@ export class HubspotService {
     return this.http.get<any>(`${environment.apiUrl}deal/${dealID}`)
   }
 
-  uploadSignature(dealID: string | null | undefined, file: string): Observable<HttpEvent<{}>> {
+  uploadSignature(dealID: string | null, name: string, file: string): Observable<HttpEvent<{}>> {
     const formdata: FormData = new FormData();
     formdata.append('file', file);
     // @ts-ignore
     formdata.append('dealid', dealID);
+    formdata.append('name', name);
     const req = new HttpRequest('POST', `${environment.apiUrl}upload/sign`, formdata, {
       reportProgress: true,
       responseType: 'text'

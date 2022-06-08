@@ -3,6 +3,16 @@
   border-width: 1px;
   margin-bottom: 20px;
   width: 280px;
+  height: 150px;
+  overflow: hidden;
+  ::ng-deep canvas {
+    position: relative;
+    bottom: 35px;
+  }
+}
+.form-control{
+  padding: 5px;
+  margin-top: 2px;
 }
 
 .buttons {
