@@ -34,6 +34,11 @@ export class SignComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initSign();
+  }
+
+  initSign() {
+    this.error = '';
     this.loading = true;
     // @ts-ignore
     this.route.paramMap.subscribe(queryParams => {
@@ -58,18 +63,9 @@ export class SignComponent implements OnInit {
         }
         this.loading = false;
       });
-
-      // this.hubspotService.getDealByID(this.dealID).subscribe(r => {
-      //   this.deal = r;
-      //   this.error = '';
-      //   this.loading = false;
-      //   if (this.deal?.properties?.signature) {
-      //     this.signatureImg = 'https://25493451.fs1.hubspotusercontent-eu1.net/hubfs/25493451/Signatures/handtekening-' + this.configID + '.png';
-      //   }
-      // }, error => {
-      //   this.error = 'Deal ' + this.dealID + ' niet gevonden';
-      //   this.loading = false;
-      // })
+    }, err => {
+      this.error = 'Er is iets fout gegaan, probeer het nogmaals of neem contact op';
+      this.loading = false;
     });
   }
 
@@ -95,7 +91,9 @@ export class SignComponent implements OnInit {
         this.signatureImg = 'https://25493451.fs1.hubspotusercontent-eu1.net/hubfs/25493451/Signatures/handtekening-' + this.configID + '.png?timeStamp='+Date.now();
         this.loading = false;
       }
+    }, err => {
+      this.error = 'Er is iets fout gegaan, probeer het nogmaals of neem contact op';
+      this.loading = false;
     })
   }
-
 }

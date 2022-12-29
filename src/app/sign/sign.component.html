@@ -1,6 +1,10 @@
 <app-loading *ngIf="loading"></app-loading>
 <ng-container *ngIf="!loading">
   <div class="danger" *ngIf="error">{{error}}</div>
+  <div class="buttons" *ngIf="error">
+    <br>
+    <button (click)="initSign()">Probeer opnieuw</button>
+  </div>
   <ng-container *ngIf="!error">
     <div class="form" *ngIf="!signatureImg">
       <label>Volledige naam</label><br>

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://api.differentdoors.nl/hubspot/'
+  apiUrl: 'https://api.differentgroup.nl/hubspot/'
 };
 
 /*
